@@ -489,120 +489,65 @@ class database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-        // --- DASHBOARD FUNCTIONS ---
-     function getCustomerCount($ownerID) {
+
+
+     public function getTotalSalesCount($ownerID): int {
         $con = $this->opencon();
-        $stmt = $con->prepare("
-            SELECT COUNT(DISTINCT c.CustomerID) 
-            FROM customer c
-            JOIN ordersection os ON c.CustomerID = os.CustomerID
-            WHERE os.OwnerID = ? OR (os.UserTypeID = 3 AND os.CustomerID IS NOT NULL AND os.OwnerID IS NULL)
-        ");
+        $stmt = $con->prepare("SELECT COUNT(o.OrderID) FROM orders o JOIN ordersection os ON o.OrderSID = os.OrderSID WHERE os.OwnerID = ?");
         $stmt->execute([$ownerID]);
-        return $stmt->fetchColumn() ?? 0;
+        return (int)$stmt->fetchColumn();
     }
     
-
-    function getTotalSales($ownerID, $days = 30) {
+    // This is the old function, we keep it in case it's used elsewhere, but the dashboard will use the one above.
+    public function getCustomerCount($ownerID): int {
         $con = $this->opencon();
-        $stmt = $con->prepare("
-            SELECT SUM(o.TotalAmount) 
-            FROM orders o
-            JOIN ordersection os ON o.OrderSID = os.OrderSID
-            WHERE (os.OwnerID = ? OR (os.UserTypeID = 3 AND os.CustomerID IS NOT NULL AND os.OwnerID IS NULL))
-            AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)
-            AND o.OrderID IN (SELECT OrderID FROM payment WHERE PaymentStatus = 0)
-        ");
-        $stmt->execute([$ownerID, (int)$days]);
-        return $stmt->fetchColumn() ?? 0.00;
+        // This query just counts registered customers. We will use getTotalSalesCount on the dashboard.
+        $stmt = $con->prepare("SELECT COUNT(CustomerID) FROM customer");
+        $stmt->execute();
+        return (int)$stmt->fetchColumn();
     }
 
-    function getTotalSystemOrders($ownerID, $days = 30) {
+    public function getTotalSales($ownerID, $days) {
         $con = $this->opencon();
-        $stmt = $con->prepare("
-            SELECT COUNT(o.OrderID) 
-            FROM orders o
-            JOIN ordersection os ON o.OrderSID = os.OrderSID
-            WHERE (os.OwnerID = ? OR (os.UserTypeID = 3 AND os.CustomerID IS NOT NULL AND os.OwnerID IS NULL))
-            AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)
-            AND o.OrderID IN (SELECT OrderID FROM payment WHERE PaymentStatus = 0)
-        ");
-        $stmt->execute([$ownerID, (int)$days]);
-        return $stmt->fetchColumn() ?? 0;
+        $stmt = $con->prepare("SELECT SUM(o.TotalAmount) FROM orders o JOIN ordersection os ON o.OrderSID = os.OrderSID WHERE os.OwnerID = ? AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+        $stmt->execute([$ownerID, $days]);
+        return (float)$stmt->fetchColumn();
     }
-
     
-    function getSalesData($ownerID, $days = 30) {
+    public function getTotalSystemOrders($ownerID, $days) {
         $con = $this->opencon();
-        $stmt = $con->prepare("
-            SELECT 
-                DATE_FORMAT(o.OrderDate, '%Y-%m-%d') as sale_date, 
-                SUM(o.TotalAmount) as daily_sales
-            FROM orders o
-            JOIN ordersection os ON o.OrderSID = os.OrderSID
-            WHERE (os.OwnerID = ? OR (os.UserTypeID = 3 AND os.CustomerID IS NOT NULL AND os.OwnerID IS NULL))
-            AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)
-            AND o.OrderID IN (SELECT OrderID FROM payment WHERE PaymentStatus = 0)
-            GROUP BY sale_date
-            ORDER BY sale_date ASC
-        ");
-        $stmt->execute([$ownerID, (int)$days]);
+        $stmt = $con->prepare("SELECT COUNT(o.OrderID) FROM orders o JOIN ordersection os ON o.OrderSID = os.OrderSID WHERE os.OwnerID = ? AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+        $stmt->execute([$ownerID, $days]);
+        return (int)$stmt->fetchColumn();
+    }
+    
+    public function getSalesData($ownerID, $days) {
+        $con = $this->opencon();
+        $stmt = $con->prepare("SELECT DATE(OrderDate) as date, SUM(TotalAmount) as total FROM orders o JOIN ordersection os ON o.OrderSID = os.OrderSID WHERE os.OwnerID = ? AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY) GROUP BY DATE(OrderDate) ORDER BY date ASC");
+        $stmt->execute([$ownerID, $days]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         $labels = [];
         $data = [];
-        $period = new DatePeriod(
-            new DateTime("-{$days} days"),
-            new DateInterval('P1D'),
-            new DateTime()
-        );
-        $salesByDate = [];
-        foreach ($results as $row) {
-            $salesByDate[$row['sale_date']] = $row['daily_sales'];
+        foreach($results as $row) {
+            $labels[] = date("M d", strtotime($row['date']));
+            $data[] = $row['total'];
         }
-
-        foreach ($period as $date) {
-            $dateStr = $date->format('Y-m-d');
-            $labels[] = $dateStr;
-            $data[] = $salesByDate[$dateStr] ?? 0;
-        }
-
         return ['labels' => $labels, 'data' => $data];
     }
-
-    function getTopProducts($ownerID, $days = 30) {
+    
+    public function getTopProducts($ownerID, $days) {
         $con = $this->opencon();
-        $stmt = $con->prepare("
-            SELECT 
-                p.ProductName, 
-                SUM(od.Quantity) as total_quantity_sold
-            FROM orderdetails od
-            JOIN product p ON od.ProductID = p.ProductID
-            JOIN orders o ON od.OrderID = o.OrderID
-            JOIN ordersection os ON o.OrderSID = os.OrderSID
-            WHERE (os.OwnerID = ? OR (os.UserTypeID = 3 AND os.CustomerID IS NOT NULL AND os.OwnerID IS NULL))
-            AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY)
-            AND o.OrderID IN (SELECT OrderID FROM payment WHERE PaymentStatus = 0)
-            AND p.is_available = 1
-            GROUP BY p.ProductName
-            ORDER BY total_quantity_sold DESC
-            LIMIT 5
-        ");
-        $stmt->execute([$ownerID, (int)$days]);
+        $stmt = $con->prepare("SELECT p.ProductName, SUM(od.Quantity) as total_quantity FROM orderdetails od JOIN product p ON od.ProductID = p.ProductID JOIN orders o ON od.OrderID = o.OrderID JOIN ordersection os ON o.OrderSID = os.OrderSID WHERE os.OwnerID = ? AND o.OrderDate >= DATE_SUB(NOW(), INTERVAL ? DAY) GROUP BY p.ProductID, p.ProductName ORDER BY total_quantity DESC LIMIT 5");
+        $stmt->execute([$ownerID, $days]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $topProducts = [];
-        foreach ($results as $row) {
-            $topProducts[] = [
-                'name' => $row['ProductName'],
-                'quantity' => $row['total_quantity_sold']
-            ];
-
+        $labels = [];
+        $data = [];
+        foreach($results as $row) {
+            $labels[] = $row['ProductName'];
+            $data[] = $row['total_quantity'];
+        }
+        return ['labels' => $labels, 'data' => $data];
     }
-        return [
-            'labels' => array_column($topProducts, 'name'),
-            'data' => array_column($topProducts, 'quantity')
-        ];
-}
 
 
 

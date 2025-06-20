@@ -48,7 +48,7 @@ $categories = $con->getAllCategories();
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>Coffee Menu with Category Tabs and Add Item Functionality</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
@@ -59,17 +59,19 @@ $categories = $con->getAllCategories();
  </head>
  <body class="bg-[rgba(255,255,255,0.7)] min-h-screen flex">
   <!-- Sidebar -->
-  <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+ 
+<aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
   <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
   <button title="Dashboard" onclick="window.location='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl"></i></button>
   <button title="Home" onclick="window.location='../Owner/mainpage.php'"><i class="fas fa-home text-xl"></i></button>
   <button title="Orders" onclick="window.location='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl"></i></button>
   <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl"></i></button>
   <button title="Inventory" onclick="window.location='../Owner/product.php'"><i class="fas fa-box text-xl"></i></button>
-  <button title="Employees" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
+  <button title="Users" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
   <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl"></i></button>
   <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl"></i></button>
 </aside>
+
 
   <!-- Main content -->
   <main class="flex-1 p-6 relative flex flex-col">

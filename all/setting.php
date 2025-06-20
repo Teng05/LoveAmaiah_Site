@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 // Start output buffering for this page's HTML, as it might be directly accessed
@@ -129,6 +130,7 @@ if (empty($userData)) {
   <?php elseif ($loggedInUserType == 'employee'): ?>
     <!-- Employee Sidebar -->
     <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+        <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
    <button aria-label="Home" class="text-[#4B2E0E] text-xl" title="Home" type="button" onclick="window.location='../Employee/employesmain.php'"><i class="fas fa-home"></i></button>
    <button aria-label="Cart" class="text-[#4B2E0E] text-xl" title="Cart" type="button" onclick="window.location='../Employee/employeepage.php'"><i class="fas fa-shopping-cart"></i></button>
    <button aria-label="Order List" class="text-[#4B2E0E] text-xl" title="Transaction Records" type="button" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list"></i></button>
@@ -139,6 +141,7 @@ if (empty($userData)) {
   <?php elseif ($loggedInUserType == 'customer'): ?>
     <!-- Customer Sidebar -->
      <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+    <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
    <button aria-label="Home" class="text-[#4B2E0E] text-xl" title="Home" type="button" onclick="window.location='../Customer/advertisement.php'"><i class="fas fa-home"></i></button>
    <button aria-label="Cart" class="text-[#4B2E0E] text-xl" title="Cart" type="button" onclick="window.location='../Customer/customerpage.php'"><i class="fas fa-shopping-cart"></i></button>
    <button aria-label="Order List" class="text-[#4B2E0E] text-xl" title="Order List" type="button" onclick="window.location='../Customer/transactionrecords.php'"><i class="fas fa-list"></i></button> <!-- LINK TO CUSTOMER'S OWN TRANSACTIONS -->
@@ -205,6 +208,24 @@ if (empty($userData)) {
                 }
             });
         });
+
+        <?php if ($loggedInUserType == 'customer'): ?>
+    document.getElementById("logout-btn").addEventListener("click", () => {
+     Swal.fire({
+       title: 'Are you sure you want to log out?',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#4B2E0E',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, log out',
+       cancelButtonText: 'Cancel'
+     }).then((result) => {
+       if (result.isConfirmed) {
+         window.location.href = "../all/logoutcos.php";
+       }
+     });
+   });
+  <?php endif; ?>
     </script>
 </body>
 </html>

@@ -15,7 +15,6 @@ $customer = $_SESSION['CustomerFN'];
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    /* Reset and common body styles */
     * {
       box-sizing: border-box;
       padding: 0;
@@ -23,54 +22,49 @@ $customer = $_SESSION['CustomerFN'];
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif; /* Keep original font-family if preferred */
-      display: flex; /* Makes the body a flex container for sidebar and main content */
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
       background: url('../images/LAbg.png') no-repeat center center/cover;
       min-height: 100vh;
-      background-color: rgba(255, 255, 255, 0.7); /* Consistent overlay/fallback */
     }
 
-    /* Consistent Sidebar Styling */
+    /* Replaced Sidebar Styling */
     .sidebar {
-      width: 90px; /* Fixed width as per other sidebars */
+      width: 64px;
       background-color: #fff;
       height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 30px; /* Consistent top padding */
-      gap: 35px; /* Consistent spacing between icons */
+      padding-top: 23px;
+      gap: 37px;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      z-index: 10; /* Ensure sidebar is above main content */
+      z-index: 10;
     }
-    /* Styles for sidebar icons/buttons/links (consistent font-size, color, hover) */
-    .sidebar a, .sidebar button {
-      color: #4B2E0E;
-      font-size: 26px; /* Consistent icon size */
-      text-decoration: none;
-      transition: color 0.3s ease;
-      /* Ensure buttons look like links */
+
+    .sidebar button {
       background: none;
       border: none;
-      padding: 0;
+      color: #4B2E0E;
+      font-size: 20px;
       cursor: pointer;
+      transition: color 0.3s ease;
     }
-    .sidebar a:hover, .sidebar button:hover {
+
+    .sidebar button:hover {
       color: #C4A07A;
     }
 
-    /* Main content styling */
     .main-content {
-      flex-grow: 1; /* Allows main content to take remaining width */
-      padding: 5vw; /* Keep original padding for this page's layout */
+      flex-grow: 1;
+      padding: 5vw;
       color: white;
-      background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+      background: rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
 
-    /* Original advertisement content styles */
     .hero {
       display: flex;
       flex-wrap: wrap;
@@ -82,17 +76,18 @@ $customer = $_SESSION['CustomerFN'];
 
     .hero img {
       width: 100%;
-      max-width: 600px;
-      border-radius: 12px;
+      max-width: 800px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
     .hero-text {
-      max-width: 650px;
+      max-width: 700px;
       text-align: left;
     }
 
     .hero-text h1 {
-      font-size: 3.5em;
+      font-size: 4.5em;
       font-weight: bold;
       margin-bottom: 20px;
       line-height: 1.2;
@@ -103,13 +98,14 @@ $customer = $_SESSION['CustomerFN'];
     }
 
     .hero-text p {
-      font-size: 1.4em;
+      font-size: 1.7em;
       margin-bottom: 30px;
+      line-height: 1.5;
     }
 
     .hero-text button {
       padding: 14px 32px;
-      font-size: 1.1em;
+      font-size: 1.2em;
       border: 2px solid white;
       border-radius: 6px;
       background: transparent;
@@ -124,23 +120,23 @@ $customer = $_SESSION['CustomerFN'];
     }
 
     .coffee-cards {
-      display: flex;
-      gap: 35px;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
     }
 
     .card {
-      width: 260px;
-      background-color: #333;
-      border-radius: 12px;
+      background-color: #444;
+      border-radius: 16px;
       overflow: hidden;
       color: white;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .card:hover {
       transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
     .card img {
@@ -156,43 +152,31 @@ $customer = $_SESSION['CustomerFN'];
     .card h3 {
       font-size: 1.4em;
       margin-bottom: 10px;
+      color: #a17850;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 1024px) {
-      .hero {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .hero-text {
-        max-width: 100%;
-      }
-
-      .hero-text h1 {
-        font-size: 2.5em;
-      }
+    .card p {
+      font-size: 1em;
+      line-height: 1.5;
     }
 
     @media (max-width: 768px) {
-      /* Sidebar is hidden on smaller screens */
       .sidebar {
         display: none;
       }
 
       .main-content {
-        padding: 30px; /* Adjust padding when sidebar is hidden */
-      }
-
-      .card {
-        width: 100%;
-        max-width: 320px;
+        padding: 30px;
       }
     }
 
     @media (max-width: 480px) {
       .hero-text h1 {
-        font-size: 1.8em;
+        font-size: 2em;
+      }
+
+      .hero-text p {
+        font-size: 1em;
       }
 
       .hero-text button {
@@ -201,21 +185,25 @@ $customer = $_SESSION['CustomerFN'];
       }
 
       .coffee-cards {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
     }
   </style>
 </head>
-<body class="min-h-screen flex">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <a href="advertisement.php" title="Home"><i class="fas fa-home"></i></a>
-    <a href="customerpage.php" title="Cart"><i class="fas fa-cart-shopping"></i></a>
-    <a href="transactionrecords.php" title="Order List"><i class="fas fa-list"></i></a>
-    <a href="../all/setting.php" title="Settings"><i class="fas fa-cog"></i></a>
-    <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-  </aside>
+<body>
+
+  <!-- Sidebar with SweetAlert logout -->
+  <!-- Sidebar with Logo and SweetAlert logout -->
+<div class="sidebar">
+  <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
+  <button title="Home" onclick="window.location='advertisement.php'"><i class="fas fa-home"></i></button>
+  <button title="Cart" onclick="window.location='customerpage.php'"><i class="fas fa-shopping-cart"></i></button>
+  <button title="Order List" onclick="window.location='transactionrecords.php'"><i class="fas fa-list"></i></button>
+  <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog"></i></button>
+  <button id="logout-btn" aria-label="Logout" name="logout" class="text-[#4B2E0E] text-xl" title="Logout" type="button"><i class="fas fa-sign-out-alt"></i></button>
+</div>
+
 
   <!-- Main content -->
   <div class="main-content">
@@ -254,7 +242,7 @@ $customer = $_SESSION['CustomerFN'];
       </div>
 
       <div class="card">
-        <img src="../images/iced_shaken_brownie.png" alt="Iced Shaken Brownie">
+        <img src="../images/iced_shaken_brownie.png" alt="Iced Brownie Espresso">
         <div class="card-body">
           <h3>Iced Brownie Espresso</h3>
           <p>Shaken espresso with rich brownie flavor — bold, cold, and energizing.</p>
@@ -263,24 +251,24 @@ $customer = $_SESSION['CustomerFN'];
     </div>
   </div>
 
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    // Common logout functionality for all users
-    document.getElementById("logout-btn").addEventListener("click", () => {
-        Swal.fire({
-            title: 'Are you sure you want to log out?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#4B2E0E',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, log out',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // This path is relative to the current file (advertisement.php is in Customer/)
-                window.location.href = "../all/logout.php"; 
-            }
-        });
+    document.getElementById('logout-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      Swal.fire({
+        title: 'Are you sure you want to log out?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4B2E0E',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log out',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "../all/logoutcos.php";
+        }
+      });
     });
-  </script>
+</script>
 </body>
 </html>

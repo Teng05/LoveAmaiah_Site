@@ -10,7 +10,6 @@ require_once('../classes/database.php');
 $con = new database();
 $sweetAlertConfig = "";
 
-
 if (isset($_POST['add_employee'])) {
   $owerID = $_SESSION['OwnerID'];
   $firstF = $_POST['firstF'];
@@ -38,9 +37,24 @@ if (isset($_POST['add_employee'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Employee List</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style> body { font-family: 'Inter', sans-serif; } </style>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .swal-feedback { color: #dc3545; font-size: 13px; text-align: left; display: block; margin-top: 5px; }
+    .swal2-input.is-valid { border-color: #198754 !important; }
+    .swal2-input.is-invalid { border-color: #dc3545 !important; }
+    .pagination-bar {
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
 </head>
 <body class="bg-[rgba(255,255,255,0.7)] min-h-screen flex">
  
@@ -52,7 +66,7 @@ if (isset($_POST['add_employee'])) {
   <button title="Orders" onclick="window.location='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl"></i></button>
   <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl"></i></button>
   <button title="Inventory" onclick="window.location='../Owner/product.php'"><i class="fas fa-box text-xl"></i></button>
-  <button title="Employees" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
+  <button title="Users" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
   <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl"></i></button>
   <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl"></i></button>
 </aside>
@@ -69,21 +83,21 @@ if (isset($_POST['add_employee'])) {
     </a>
   </header>
  
-  <section class="bg-white rounded-xl p-4 max-w-6xl shadow-lg flex-1 overflow-x-auto">
-    <table class="min-w-full text-sm">
+  <section class="bg-white rounded-xl p-4 w-full shadow-lg flex-1 overflow-x-auto relative">
+    <table class="w-full text-sm">
       <thead>
         <tr class="text-left text-[#4B2E0E] border-b">
-          <th class="py-2 px-3">#</th>
-          <th class="py-2 px-3">Name</th>
-          <th class="py-2 px-3">Role</th>
-          <th class="py-2 px-3">Status</th> <!-- NEW COLUMN -->
-          <th class="py-2 px-3">Phone</th>
-          <th class="py-2 px-3">Email</th>
-          <th class="py-2 px-3">Username</th>
-          <th class="py-2 px-3 text-center">Actions</th>
+          <th class="py-2 px-3 w-[5%]">#</th>
+          <th class="py-2 px-3 w-[20%]">Name</th>
+          <th class="py-2 px-3 w-[15%]">Role</th>
+          <th class="py-2 px-3 w-[10%]">Status</th>
+          <th class="py-2 px-3 w-[15%]">Phone</th>
+          <th class="py-2 px-3 w-[20%]">Email</th>
+          <th class="py-2 px-3 w-[15%]">Username</th>
+          <th class="py-2 px-3 w-[10%] text-center">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="employee-body">
         <?php
         $employees = $con->getEmployee();
         foreach ($employees as $employee) {
@@ -92,7 +106,6 @@ if (isset($_POST['add_employee'])) {
           <td class="py-2 px-3"><?= htmlspecialchars($employee['EmployeeID']) ?></td>
           <td class="py-2 px-3 font-semibold <?= $employee['is_active'] == 0 ? 'line-through' : '' ?>"><?= htmlspecialchars($employee['EmployeeFN'] . ' ' . $employee['EmployeeLN']) ?></td>
           <td class="py-2 px-3"><?= htmlspecialchars($employee['Role']) ?></td>
-          <!-- STATUS DISPLAY -->
           <td class="py-2 px-3">
             <?php if ($employee['is_active'] == 1): ?>
               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">Active</span>
@@ -105,14 +118,12 @@ if (isset($_POST['add_employee'])) {
           <td class="py-2 px-3"><?= htmlspecialchars($employee['E_Username']) ?></td>
           <td class="py-2 px-3 text-center">
             <?php if ($employee['is_active'] == 1): ?>
-              <!-- Show Archive button for active employees -->
               <button class="text-red-600 hover:underline text-lg archive-employee-btn" title="Archive"
                  data-employee-id="<?= htmlspecialchars($employee['EmployeeID']) ?>"
                  data-employee-name="<?= htmlspecialchars($employee['EmployeeFN'] . ' ' . $employee['EmployeeLN']) ?>">
                 <i class="fas fa-archive"></i>
               </button>
             <?php else: ?>
-              <!-- Show Restore button for archived employees -->
               <button class="text-green-600 hover:underline text-lg restore-employee-btn" title="Restore"
                  data-employee-id="<?= htmlspecialchars($employee['EmployeeID']) ?>"
                  data-employee-name="<?= htmlspecialchars($employee['EmployeeFN'] . ' ' . $employee['EmployeeLN']) ?>">
@@ -124,27 +135,104 @@ if (isset($_POST['add_employee'])) {
         <?php } ?>
       </tbody>
     </table>
+    <div id="pagination" class="pagination-bar"></div>
   </section>
- 
-  <!-- Hidden form for add employee (no changes) -->
+
+  <!-- Hidden form for add employee -->
   <form id="add-employee-form" method="POST" style="display:none;">
-    <input type="hidden" name="firstF" id="form-firstF"><input type="hidden" name="firstN" id="form-firstN">
-    <input type="hidden" name="role" id="form-role"><input type="hidden" name="number" id="form-number">
-    <input type="hidden" name="email" id="form-email"><input type="hidden" name="username" id="form-username">
-    <input type="hidden" name="password" id="form-password"><input type="hidden" name="add_employee" value="1">
+    <input type="hidden" name="firstF" id="form-firstF">
+    <input type="hidden" name="firstN" id="form-firstN">
+    <input type="hidden" name="role" id="form-role">
+    <input type="hidden" name="number" id="form-number">
+    <input type="hidden" name="email" id="form-email">
+    <input type="hidden" name="username" id="form-username">
+    <input type="hidden" name="password" id="form-password">
+    <input type="hidden" name="add_employee" value="1">
   </form>
- 
+
   <?= $sweetAlertConfig ?>
 </main>
- 
-<script>
-// Add Employee popup script (no changes needed here)
-document.getElementById('add-employee-btn').addEventListener('click', function(e) { /* ... same as before ... */ });
 
-// --- JAVASCRIPT FOR ARCHIVE/RESTORE ---
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // Logic for ARCHIVE button
+<script>
+// --- START: FULL JAVASCRIPT BLOCK ---
+const isNotEmpty = (value) => value.trim() !== '';
+const isPasswordValid = (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(value);
+const isPhoneValid = (value) => /^09\d{9}$/.test(value);
+
+function setSwalFieldState(field, isValid, message) {
+  if (isValid) {
+    field.classList.remove('is-invalid');
+    field.classList.add('is-valid');
+    field.style.borderColor = '#198754';
+    if(field.nextElementSibling) field.nextElementSibling.textContent = '';
+  } else {
+    field.classList.remove('is-valid');
+    field.classList.add('is-invalid');
+    field.style.borderColor = '#dc3545';
+    if(field.nextElementSibling) field.nextElementSibling.textContent = message;
+  }
+}
+
+document.getElementById('add-employee-btn').addEventListener('click', function (e) {
+  e.preventDefault();
+  Swal.fire({
+    title: 'Add Employee',
+    html:
+      `<input id="swal-emp-fname" class="swal2-input" placeholder="First Name">
+       <input id="swal-emp-lname" class="swal2-input" placeholder="Last Name">
+       <select id="swal-emp-role" class="swal2-input">
+          <option value="" disabled selected>Select Role</option>
+          <option value="Barista">Barista</option>
+          <option value="Cashier">Cashier</option>
+        </select>
+       <input id="swal-emp-phone" class="swal2-input" placeholder="Phone Number (09xxxxxxxxx)">
+       <span class="swal-feedback"></span>
+       <input id="swal-emp-email" class="swal2-input" type="email" placeholder="Email">
+       <span class="swal-feedback"></span>
+       <input id="swal-emp-username" class="swal2-input" placeholder="Username">
+       <span class="swal-feedback"></span>
+       <input id="swal-emp-password" class="swal2-input" type="password" placeholder="Password">
+       <span class="swal-feedback"></span>`,
+    showCancelButton: true,
+    confirmButtonText: 'Add',
+    preConfirm: () => {
+      const firstF = document.getElementById('swal-emp-fname').value.trim();
+      const firstN = document.getElementById('swal-emp-lname').value.trim();
+      const role = document.getElementById('swal-emp-role').value;
+      const number = document.getElementById('swal-emp-phone').value.trim();
+      const email = document.getElementById('swal-emp-email').value.trim();
+      const username = document.getElementById('swal-emp-username').value.trim();
+      const password = document.getElementById('swal-emp-password').value;
+ 
+      if (!firstF || !firstN || !role || !isPhoneValid(number) || !email || !username || !isPasswordValid(password)) {
+        Swal.showValidationMessage('Please fix all errors before submitting.');
+        return false;
+      }
+      
+      document.getElementById('form-firstF').value = firstF;
+      document.getElementById('form-firstN').value = firstN;
+      document.getElementById('form-role').value = role;
+      document.getElementById('form-number').value = number;
+      document.getElementById('form-email').value = email;
+      document.getElementById('form-username').value = username;
+      document.getElementById('form-password').value = password;
+      return true;
+    },
+    didOpen: () => {
+      const phoneField = document.getElementById('swal-emp-phone');
+      phoneField.addEventListener('input', () => setSwalFieldState(phoneField, isPhoneValid(phoneField.value), 'Invalid PH phone number (e.g., 09xxxxxxxxx)'));
+
+      const passwordField = document.getElementById('swal-emp-password');
+      passwordField.addEventListener('input', () => setSwalFieldState(passwordField, isPasswordValid(passwordField.value), 'Min. 6 chars, 1 uppercase, 1 number, 1 special char.'));
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById('add-employee-form').submit();
+    }
+  });
+});
+
+function initializeActionButtons() {
   document.querySelectorAll('.archive-employee-btn').forEach(button => {
     button.addEventListener('click', function(e) {
       e.preventDefault();
@@ -178,7 +266,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Logic for RESTORE button
   document.querySelectorAll('.restore-employee-btn').forEach(button => {
     button.addEventListener('click', function(e) {
       e.preventDefault();
@@ -211,7 +298,59 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+}
+
+function paginateTable(containerId, paginationId, rowsPerPage = 15) {
+  const tbody = document.getElementById(containerId);
+  const pagination = document.getElementById(paginationId);
+  if (!tbody || !pagination) return;
+  const rows = Array.from(tbody.children);
+  const pageCount = Math.ceil(rows.length / rowsPerPage);
+  let currentPage = 1;
+
+  function showPage(page) {
+    rows.forEach((row, i) => {
+      row.style.display = (i >= (page - 1) * rowsPerPage && i < page * rowsPerPage) ? '' : 'none';
+    });
+    renderPagination();
+  }
+
+  function renderPagination() {
+    pagination.innerHTML = '';
+    const createButton = (text, onClick, isDisabled = false) => {
+        const btn = document.createElement('button');
+        btn.textContent = text;
+        btn.disabled = isDisabled;
+        btn.onclick = onClick;
+        btn.className = "px-3 py-1 border rounded disabled:opacity-50";
+        return btn;
+    };
+    
+    pagination.appendChild(createButton('Prev', () => { if (currentPage > 1) { currentPage--; showPage(currentPage); } }, currentPage === 1));
+    for (let i = 1; i <= pageCount; i++) {
+        const btn = createButton(i, () => { currentPage = i; showPage(currentPage); });
+        if (i === currentPage) btn.className += ' bg-[#4B2E0E] text-white';
+        pagination.appendChild(btn);
+    }
+    pagination.appendChild(createButton('Next', () => { if (currentPage < pageCount) { currentPage++; showPage(currentPage); } }, currentPage === pageCount));
+  }
+  if (pageCount > 1) { showPage(currentPage); }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  paginateTable('employee-body', 'pagination');
+  initializeActionButtons();
 });
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+    Swal.fire({
+        title: 'Are you sure you want to log out?', icon: 'warning', showCancelButton: true,
+        confirmButtonColor: '#4B2E0E', cancelButtonColor: '#d33', confirmButtonText: 'Yes, log out'
+    }).then((result) => {
+        if (result.isConfirmed) { window.location.href = "../all/logout.php"; }
+    });
+});
+// --- END: FULL JAVASCRIPT BLOCK ---
 </script>
 </body>
 </html>
