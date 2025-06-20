@@ -109,12 +109,12 @@ if (!empty($topProducts['labels'][0])) {
     <!-- Sidebar -->
     <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
   <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-   <button title="Dashboard" onclick="window.location='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl"></i></button>
+  <button title="Dashboard" onclick="window.location='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl"></i></button>
   <button title="Home" onclick="window.location='../Owner/mainpage.php'"><i class="fas fa-home text-xl"></i></button>
   <button title="Orders" onclick="window.location='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl"></i></button>
   <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl"></i></button>
   <button title="Inventory" onclick="window.location='../Owner/product.php'"><i class="fas fa-box text-xl"></i></button>
-  <button title="Users" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
+  <button title="Employees" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
   <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl"></i></button>
   <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl"></i></button>
 </aside>
