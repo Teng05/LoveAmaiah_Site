@@ -161,7 +161,7 @@ error_log("DEBUG: tranlist.php - Categorized walkinStaffOrders count: " . count(
 
   <!-- Main content container -->
   <div class="main-content">
-    <img src="https://storage.googleapis.com/a1aa/image/22cccae8-cc1a-4fb3-7955-287078a4f8d4.jpg" alt="Background image of coffee beans" class="bg-image" />
+    <img src="../images/Labg.png" alt="Background image of coffee beans" class="bg-image" />
     
     <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl p-8 shadow-lg max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
     

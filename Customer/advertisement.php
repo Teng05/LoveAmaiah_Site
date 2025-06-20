@@ -13,7 +13,9 @@ $customer = $_SESSION['CustomerFN'];
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LoveAmiah - Advertisement</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
+    /* Reset and common body styles */
     * {
       box-sizing: border-box;
       padding: 0;
@@ -21,45 +23,54 @@ $customer = $_SESSION['CustomerFN'];
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
+      font-family: 'Segoe UI', sans-serif; /* Keep original font-family if preferred */
+      display: flex; /* Makes the body a flex container for sidebar and main content */
       background: url('../images/LAbg.png') no-repeat center center/cover;
       min-height: 100vh;
+      background-color: rgba(255, 255, 255, 0.7); /* Consistent overlay/fallback */
     }
 
+    /* Consistent Sidebar Styling */
     .sidebar {
-      width: 90px;
+      width: 90px; /* Fixed width as per other sidebars */
       background-color: #fff;
       height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 30px;
-      gap: 35px;
+      padding-top: 30px; /* Consistent top padding */
+      gap: 35px; /* Consistent spacing between icons */
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 10; /* Ensure sidebar is above main content */
     }
-
-    .sidebar a {
+    /* Styles for sidebar icons/buttons/links (consistent font-size, color, hover) */
+    .sidebar a, .sidebar button {
       color: #4B2E0E;
-      font-size: 26px;
+      font-size: 26px; /* Consistent icon size */
       text-decoration: none;
       transition: color 0.3s ease;
+      /* Ensure buttons look like links */
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
-
-    .sidebar a:hover {
+    .sidebar a:hover, .sidebar button:hover {
       color: #C4A07A;
     }
 
+    /* Main content styling */
     .main-content {
-      flex-grow: 1;
-      padding: 5vw;
+      flex-grow: 1; /* Allows main content to take remaining width */
+      padding: 5vw; /* Keep original padding for this page's layout */
       color: white;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
 
+    /* Original advertisement content styles */
     .hero {
       display: flex;
       flex-wrap: wrap;
@@ -147,6 +158,7 @@ $customer = $_SESSION['CustomerFN'];
       margin-bottom: 10px;
     }
 
+    /* Responsive adjustments */
     @media (max-width: 1024px) {
       .hero {
         flex-direction: column;
@@ -163,12 +175,13 @@ $customer = $_SESSION['CustomerFN'];
     }
 
     @media (max-width: 768px) {
+      /* Sidebar is hidden on smaller screens */
       .sidebar {
         display: none;
       }
 
       .main-content {
-        padding: 30px;
+        padding: 30px; /* Adjust padding when sidebar is hidden */
       }
 
       .card {
@@ -194,14 +207,15 @@ $customer = $_SESSION['CustomerFN'];
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex">
   <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="advertisement.php" title="Home"><i class="fas fa-house"></i></a>
-    <a href="../Customer/customerpage.php" title="Cart"><i class="fas fa-cart-shopping"></i></a>
-    <a href="../all/setting.php" title="Settings"><i class="fas fa-gear"></i></a>
-    <a href="../all/logout.php" title="Logout"><i class="fas fa-right-from-bracket"></i></a>
-  </div>
+  <aside class="sidebar">
+    <a href="advertisement.php" title="Home"><i class="fas fa-home"></i></a>
+    <a href="customerpage.php" title="Cart"><i class="fas fa-cart-shopping"></i></a>
+    <a href="transactionrecords.php" title="Order List"><i class="fas fa-list"></i></a>
+    <a href="../all/setting.php" title="Settings"><i class="fas fa-cog"></i></a>
+    <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+  </aside>
 
   <!-- Main content -->
   <div class="main-content">
@@ -248,5 +262,25 @@ $customer = $_SESSION['CustomerFN'];
       </div>
     </div>
   </div>
+
+  <script>
+    // Common logout functionality for all users
+    document.getElementById("logout-btn").addEventListener("click", () => {
+        Swal.fire({
+            title: 'Are you sure you want to log out?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#4B2E0E',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, log out',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // This path is relative to the current file (advertisement.php is in Customer/)
+                window.location.href = "../all/logout.php"; 
+            }
+        });
+    });
+  </script>
 </body>
 </html>
