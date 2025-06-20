@@ -13,7 +13,7 @@ if (isset($_SESSION['EmployeeID'])) {
     exit();
 }
 if (isset($_SESSION['OwnerID'])) {
-    header('Location: ../Owner/mainpage.php');
+    header('Location: ../Owner/dashboard.php');
     exit();
 }
 
@@ -68,7 +68,7 @@ if (isset($_POST['login'])) {
                   text: 'Welcome, " . addslashes(htmlspecialchars($own['OwnerFN'])) . "!',
                   confirmButtonText: 'Continue'
                 }).then(() => {
-                  window.location.href = '../Owner/mainpage.php';
+                  window.location.href = '../Owner/dashboard.php';
                 });
                 </script>";
             } else {

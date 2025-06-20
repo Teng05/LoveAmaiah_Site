@@ -205,23 +205,7 @@ function paginate(containerId, paginationId, itemsPerPage = 3) {
 }
  
 document.addEventListener('DOMContentLoaded', () => {
-  paginate('transaction-list', 'pagination');
- 
-  document.getElementById("logout-btn").addEventListener("click", () => {
-    Swal.fire({
-      title: 'Are you sure you want to log out?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#4B2E0E',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, log out',
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "../all/coffee.php";
-      }
-    });
-  });
+  paginate('transaction-list', 'pagination');  
 });
 </script>
 </body>
