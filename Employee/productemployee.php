@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['EmployeeID'])) {
@@ -36,13 +37,27 @@ $sweetAlertConfig = "";
  
 <!-- Sidebar -->
 <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-  <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-  <button title="Home" onclick="window.location='../Employee/employesmain.php'"><i class="fas fa-home text-xl text-[#4B2E0E]"></i></button>
-  <button title="Orders" onclick="window.location='../Employee/employeepage.php'"><i class="fas fa-shopping-cart text-xl text-[#4B2E0E]"></i></button>
-  <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl text-[#4B2E0E]"></i></button>
-  <button title="Inventory" onclick="window.location='../Employee/productemployee.php'"><i class="fas fa-box text-xl text-[#4B2E0E]"></i></button>
-  <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl text-[#4B2E0E]"></i></button>
-  <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i></button>
+    <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+
+    <button title="Home" onclick="window.location.href='../Employee/employesmain.php'">
+        <i class="fas fa-home text-xl <?= $current == 'employesmain.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Cart" onclick="window.location.href='../Employee/employeepage.php'">
+        <i class="fas fa-shopping-cart text-xl <?= $current == 'employeepage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Transaction Records" onclick="window.location.href='../all/tranlist.php'">
+        <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Product List" onclick="window.location.href='../Employee/productemployee.php'">
+        <i class="fas fa-box text-xl <?= $current == 'productemployee.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Settings" onclick="window.location.href='../all/setting.php'">
+        <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button id="logout-btn" title="Logout">
+        <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+    </button>
 </aside>
  
 <!-- Main Content -->

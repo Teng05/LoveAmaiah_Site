@@ -69,14 +69,25 @@ $categories = $con->getAllCategories();
 </head>
 <body class="bg-[rgba(255,255,255,0.7)] min-h-screen flex">
   <!-- Sidebar -->
-  <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-    <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
-    <button title="Home" onclick="window.location='advertisement.php'"><i class="fas fa-home text-xl text-[#4B2E0E]"></i></button>
-    <button title="Cart" onclick="window.location='customerpage.php'"><i class="fas fa-shopping-cart text-xl text-[#4B2E0E]"></i></button>
-    <button title="Order List" onclick="window.location='transactionrecords.php'"><i class="fas fa-list text-xl text-[#4B2E0E]"></i></button>
-    <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl text-[#4B2E0E]"></i></button>
-    <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i></button>
-  </aside>
+   <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
+     <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+  <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
+  <button aria-label="Home" class="text-xl" title="Home" type="button" onclick="window.location='../Customer/advertisement.php'">
+    <i class="fas fa-home <?= $currentPage === 'advertisement.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Cart" class="text-xl" title="Cart" type="button" onclick="window.location='../Customer/customerpage.php'">
+    <i class="fas fa-shopping-cart <?= $currentPage === 'customerpage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Order List" class="text-xl" title="Order List" type="button" onclick="window.location='../Customer/transactionrecords.php'">
+    <i class="fas fa-list <?= $currentPage === 'transactionrecords.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Settings" class="text-xl" title="Settings" type="button" onclick="window.location='../all/setting.php'">
+    <i class="fas fa-cog <?= $currentPage === 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button id="logout-btn" aria-label="Logout" name="logout" class="text-xl" title="Logout" type="button">
+    <i class="fas fa-sign-out-alt text-[#4B2E0E]"></i>
+  </button>
+</aside>
 
   <!-- Main content -->
   <!-- (The rest of your existing <main> and <script> content remains unchanged below this line) -->
@@ -89,16 +100,12 @@ $categories = $con->getAllCategories();
     <header class="mb-4">
       <p class="text-xs text-gray-400 mb-0.5">Welcome, <?php echo htmlspecialchars($customer); ?></p>
       <h1 class="text-[#4B2E0E] font-semibold text-xl mb-3"><?php echo htmlspecialchars($customer); ?>'s Order</h1>
-      <form aria-label="Search menu" class="w-full max-w-xs ml-auto relative" role="search">
-        <input aria-label="Search menu" class="w-full rounded-full py-2 px-4 pr-10 text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4B2E0E]" placeholder="Search menu..." type="search"/>
-        <button aria-label="Search" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
     </header>
  
     <!-- Category buttons -->
-   <nav aria-label="Coffee categories" class="flex flex-wrap gap-3 mb-3 max-w-xl" id="category-nav"></nav>
+   <nav aria-label="Coffee categories" id="category-nav"
+  class="flex gap-3 mb-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-[#c4b09a] scrollbar-track-transparent px-1">
+</nav>
    <!-- Coffee Menu Grid -->
   <section aria-label="Coffee menu" class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl p-4 max-h-[600px] overflow-y-auto shadow-lg flex-1" id="menu-scroll">
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="menu-items"></div>

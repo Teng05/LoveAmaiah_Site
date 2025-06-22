@@ -43,16 +43,35 @@ if (!empty($topProducts['labels'][0])) {
 </head>
 <body class="min-h-screen flex">
     <!-- Sidebar -->
-    <aside class="bg-white w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-        <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-        <button title="Dashboard" onclick="window.location.href='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl text-[#C4A07A]"></i></button>
-        <button title="Orders" onclick="window.location.href='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl text-[#4B2E0E]"></i></button>
-        <button title="Order List" onclick="window.location.href='../all/tranlist.php'"><i class="fas fa-list text-xl text-[#4B2E0E]"></i></button>
-        <button title="Inventory" onclick="window.location.href='../Owner/product.php'"><i class="fas fa-box text-xl text-[#4B2E0E]"></i></button>
-        <button title="Employees" onclick="window.location.href='../Owner/user.php'"><i class="fas fa-users text-xl text-[#4B2E0E]"></i></button>
-        <button title="Settings" onclick="window.location.href='../all/setting.php'"><i class="fas fa-cog text-xl text-[#4B2E0E]"></i></button>
-        <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i></button>
-    </aside>
+    <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+    <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+    <button title="Dashboard" onclick="window.location.href='../Owner/dashboard.php'">
+        <i class="fas fa-chart-line text-xl <?= $current == 'dashboard.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Home" onclick="window.location.href='../Owner/mainpage.php'">
+        <i class="fas fa-home text-xl <?= $current == 'mainpage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Cart" onclick="window.location.href='../Owner/page.php'">
+        <i class="fas fa-shopping-cart text-xl <?= $current == 'page.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Order List" onclick="window.location.href='../all/tranlist.php'">
+        <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Product List" onclick="window.location.href='../Owner/product.php'">
+        <i class="fas fa-box text-xl <?= $current == 'product.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Employees" onclick="window.location.href='../Owner/user.php'">
+        <i class="fas fa-users text-xl <?= $current == 'user.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Settings" onclick="window.location.href='../all/setting.php'">
+        <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button id="logout-btn" title="Logout">
+        <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+    </button>
+</aside>
+
     <!-- Main Content -->
     <div class="flex-grow p-6 relative">
         <img src="https://storage.googleapis.com/a1aa/image/22cccae8-cc1a-4fb3-7955-287078a4f8d4.jpg" alt="Background" class="absolute inset-0 w-full h-full object-cover opacity-20 -z-10" />

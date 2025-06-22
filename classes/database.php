@@ -144,7 +144,7 @@ class database {
                 $stmt->execute([$orderID, $productID, $priceID, $item['quantity'], $item['price'] * $item['quantity']]);
             }
             $referenceNo = strtoupper($referencePrefix . uniqid() . mt_rand(1000, 9999));
-            $this->addPaymentRecord($db, $orderID, $paymentMethod, $totalAmount, $referenceNo, 0);
+            $this->addPaymentRecord($db, $orderID, $paymentMethod, $totalAmount, $referenceNo, 1);
             $db->commit();
             return ['success' => true, 'message' => 'Transaction successful!', 'order_id' => $orderID, 'ref_no' => $referenceNo];
         } catch (Exception $e) {
@@ -351,7 +351,7 @@ class database {
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    function addPaymentRecord(PDO $pdo, $orderID, $paymentMethod, $paymentAmount, $referenceNo, $paymentStatus = 0): bool {
+    function addPaymentRecord(PDO $pdo, $orderID, $paymentMethod, $paymentAmount, $referenceNo, $paymentStatus = 1): bool {
         try {
             $stmt = $pdo->prepare("INSERT INTO payment (OrderID, PaymentMethod, PaymentAmount, PaymentStatus, ReferenceNo) VALUES (?, ?, ?, ?, ?)");
             return $stmt->execute([$orderID, $paymentMethod, $paymentAmount, $paymentStatus, $referenceNo]);

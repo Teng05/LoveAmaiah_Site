@@ -117,37 +117,79 @@ if (empty($userData)) {
   <?php if ($loggedInUserType == 'owner'): ?>
     <!-- Owner Sidebar -->
     <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-  <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-  <button title="Dashboard" onclick="window.location='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl"></i></button>
-  <button title="Home" onclick="window.location='../Owner/mainpage.php'"><i class="fas fa-home text-xl"></i></button>
-  <button title="Orders" onclick="window.location='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl"></i></button>
-  <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl"></i></button>
-  <button title="Inventory" onclick="window.location='../Owner/product.php'"><i class="fas fa-box text-xl"></i></button>
-  <button title="Users" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
-  <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl"></i></button>
-  <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl"></i></button>
+    <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+    <button title="Dashboard" onclick="window.location.href='../Owner/dashboard.php'">
+        <i class="fas fa-chart-line text-xl <?= $current == 'dashboard.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Home" onclick="window.location.href='../Owner/mainpage.php'">
+        <i class="fas fa-home text-xl <?= $current == 'mainpage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Orders" onclick="window.location.href='../Owner/page.php'">
+        <i class="fas fa-shopping-cart text-xl <?= $current == 'page.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Order List" onclick="window.location.href='../all/tranlist.php'">
+        <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Inventory" onclick="window.location.href='../Owner/product.php'">
+        <i class="fas fa-box text-xl <?= $current == 'product.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Users" onclick="window.location.href='../Owner/user.php'">
+        <i class="fas fa-users text-xl <?= $current == 'user.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Settings" onclick="window.location.href='../all/setting.php'">
+        <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button id="logout-btn" title="Logout">
+        <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+    </button>
 </aside>
   <?php elseif ($loggedInUserType == 'employee'): ?>
     <!-- Employee Sidebar -->
     <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-        <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-   <button aria-label="Home" class="text-[#4B2E0E] text-xl" title="Home" type="button" onclick="window.location='../Employee/employesmain.php'"><i class="fas fa-home"></i></button>
-   <button aria-label="Cart" class="text-[#4B2E0E] text-xl" title="Cart" type="button" onclick="window.location='../Employee/employeepage.php'"><i class="fas fa-shopping-cart"></i></button>
-   <button aria-label="Order List" class="text-[#4B2E0E] text-xl" title="Transaction Records" type="button" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list"></i></button>
-   <button aria-label="Box" class="text-[#4B2E0E] text-xl" title="Box" type="button" onclick="window.location='../Employee/productemployee.php'"><i class="fas fa-box"></i></button>
-   <button aria-label="Settings" class="text-[#4B2E0E] text-xl" title="Settings" type="button" onclick="window.location='../all/setting.php'"><i class="fas fa-cog"></i></button>
-   <button id="logout-btn" aria-label="Logout" name="logout" class="text-[#4B2E0E] text-xl" title="Logout" type="button"><i class="fas fa-sign-out-alt"></i></button>
-  </aside>  
+    <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+
+    <button title="Home" onclick="window.location.href='../Employee/employesmain.php'">
+        <i class="fas fa-home text-xl <?= $current == 'employesmain.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Cart" onclick="window.location.href='../Employee/employeepage.php'">
+        <i class="fas fa-shopping-cart text-xl <?= $current == 'employeepage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Transaction Records" onclick="window.location.href='../all/tranlist.php'">
+        <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Box" onclick="window.location.href='../Employee/productemployee.php'">
+        <i class="fas fa-box text-xl <?= $current == 'productemployee.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Settings" onclick="window.location.href='../all/setting.php'">
+        <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button id="logout-btn" title="Logout">
+        <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+    </button>
+</aside>
   <?php elseif ($loggedInUserType == 'customer'): ?>
     <!-- Customer Sidebar -->
+     <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
      <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-    <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
-   <button aria-label="Home" class="text-[#4B2E0E] text-xl" title="Home" type="button" onclick="window.location='../Customer/advertisement.php'"><i class="fas fa-home"></i></button>
-   <button aria-label="Cart" class="text-[#4B2E0E] text-xl" title="Cart" type="button" onclick="window.location='../Customer/customerpage.php'"><i class="fas fa-shopping-cart"></i></button>
-   <button aria-label="Order List" class="text-[#4B2E0E] text-xl" title="Order List" type="button" onclick="window.location='../Customer/transactionrecords.php'"><i class="fas fa-list"></i></button> <!-- LINK TO CUSTOMER'S OWN TRANSACTIONS -->
-   <button aria-label="Settings" class="text-[#4B2E0E] text-xl" title="Settings" type="button" onclick="window.location='../all/setting.php'"><i class="fas fa-cog"></i></button>
-   <button id="logout-btn" aria-label="Logout" name="logout" class="text-[#4B2E0E] text-xl" title="Logout" type="button"><i class="fas fa-sign-out-alt"></i></button>
-  </aside>
+  <img src="../images/logo.png" alt="Logo" style="width: 56px; height: 56px; border-radius: 9999px; margin-bottom: 25px;" />
+  <button aria-label="Home" class="text-xl" title="Home" type="button" onclick="window.location='../Customer/advertisement.php'">
+    <i class="fas fa-home <?= $currentPage === 'advertisement.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Cart" class="text-xl" title="Cart" type="button" onclick="window.location='../Customer/customerpage.php'">
+    <i class="fas fa-shopping-cart <?= $currentPage === 'customerpage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Order List" class="text-xl" title="Order List" type="button" onclick="window.location='../Customer/transactionrecords.php'">
+    <i class="fas fa-list <?= $currentPage === 'transactionrecords.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button aria-label="Settings" class="text-xl" title="Settings" type="button" onclick="window.location='../all/setting.php'">
+    <i class="fas fa-cog <?= $currentPage === 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button id="logout-btn" aria-label="Logout" name="logout" class="text-xl" title="Logout" type="button">
+    <i class="fas fa-sign-out-alt text-[#4B2E0E]"></i>
+  </button>
+</aside>
   <?php endif; ?>
 
   <!-- Main content area for the settings form -->

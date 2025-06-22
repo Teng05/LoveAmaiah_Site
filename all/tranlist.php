@@ -106,34 +106,65 @@ foreach ($allOrders as $transaction) {
 
 <?php if ($loggedInUserType == 'owner'): ?>
 <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-  <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-  <button title="Dashboard" onclick="window.location='../Owner/dashboard.php'"><i class="fas fa-chart-line text-xl"></i></button>
-  <button title="Home" onclick="window.location='../Owner/mainpage.php'"><i class="fas fa-home text-xl"></i></button>
-  <button title="Orders" onclick="window.location='../Owner/page.php'"><i class="fas fa-shopping-cart text-xl"></i></button>
-  <button title="Order List" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list text-xl"></i></button>
-  <button title="Inventory" onclick="window.location='../Owner/product.php'"><i class="fas fa-box text-xl"></i></button>
-  <button title="Users" onclick="window.location='../Owner/user.php'"><i class="fas fa-users text-xl"></i></button>
-  <button title="Settings" onclick="window.location='../all/setting.php'"><i class="fas fa-cog text-xl"></i></button>
-  <button id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt text-xl"></i></button>
+    <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+    <button title="Dashboard" onclick="window.location.href='../Owner/dashboard.php'">
+        <i class="fas fa-chart-line text-xl <?= $current == 'dashboard.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Home" onclick="window.location.href='../Owner/mainpage.php'">
+        <i class="fas fa-home text-xl <?= $current == 'mainpage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Orders" onclick="window.location.href='../Owner/page.php'">
+        <i class="fas fa-shopping-cart text-xl <?= $current == 'page.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Order List" onclick="window.location.href='../all/tranlist.php'">
+        <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Inventory" onclick="window.location.href='../Owner/product.php'">
+        <i class="fas fa-box text-xl <?= $current == 'product.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Users" onclick="window.location.href='../Owner/user.php'">
+        <i class="fas fa-users text-xl <?= $current == 'user.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button title="Settings" onclick="window.location.href='../all/setting.php'">
+        <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+    </button>
+    <button id="logout-btn" title="Logout">
+        <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+    </button>
 </aside>
 <?php elseif ($loggedInUserType == 'employee'): ?>
     <!-- Employee Sidebar -->
-    <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
-   <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
-   <button aria-label="Home" class="text-[#4B2E0E] text-xl" title="Home" type="button" onclick="window.location='../Employee/employesmain.php'"><i class="fas fa-home"></i></button>
-   <button aria-label="Cart" class="text-[#4B2E0E] text-xl" title="Cart" type="button" onclick="window.location='../Employee/employeepage.php'"><i class="fas fa-shopping-cart"></i></button>
-   <button aria-label="Order List" class="text-[#4B2E0E] text-xl" title="Transaction Records" type="button" onclick="window.location='../all/tranlist.php'"><i class="fas fa-list"></i></button>
-   <button aria-label="Box" class="text-[#4B2E0E] text-xl" title="Box" type="button" onclick="window.location='../Employee/productemployee.php'"><i class="fas fa-box"></i></button>
-   <button aria-label="Settings" class="text-[#4B2E0E] text-xl" title="Settings" type="button" onclick="window.location='../all/setting.php'"><i class="fas fa-cog"></i></button>
-   <button id="logout-btn" aria-label="Logout" name="logout" class="text-[#4B2E0E] text-xl" title="Logout" type="button"><i class="fas fa-sign-out-alt"></i></button>
-  </aside>  
+   <?php $current = basename($_SERVER['PHP_SELF']); ?>   
+<aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
+  <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
+  
+  <button title="Home" onclick="window.location.href='../Employee/employesmain.php'">
+      <i class="fas fa-home text-xl <?= $current == 'employesmain.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button title="Cart" onclick="window.location.href='../Employee/employeepage.php'">
+      <i class="fas fa-shopping-cart text-xl <?= $current == 'employeepage.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button title="Transaction Records" onclick="window.location.href='../all/tranlist.php'">
+      <i class="fas fa-list text-xl <?= $current == 'tranlist.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button title="Box" onclick="window.location.href='../Employee/productemployee.php'">
+      <i class="fas fa-box text-xl <?= $current == 'productemployee.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button title="Settings" onclick="window.location.href='../all/setting.php'">
+      <i class="fas fa-cog text-xl <?= $current == 'setting.php' ? 'text-[#C4A07A]' : 'text-[#4B2E0E]' ?>"></i>
+  </button>
+  <button id="logout-btn" title="Logout">
+      <i class="fas fa-sign-out-alt text-xl text-[#4B2E0E]"></i>
+  </button>
+</aside>
 <?php endif; ?>
 
 <div class="main-content">
   <img src="../images/Labg.png" alt="Background image" class="bg-image" />
   <div class="flex-wrapper relative z-10">
 
-    <!-- Customer Orders -->
+    <!-- Customer Account Orders -->
     <div class="order-section">
       <h1 class="text-xl font-bold text-[#4B2E0E] mb-4 flex items-center gap-2">
         <i class="fas fa-user-check"></i> Customer Account Orders
@@ -142,13 +173,21 @@ foreach ($allOrders as $transaction) {
         <?php foreach ($customerAccountOrders as $transaction): ?>
           <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-sm mb-4">
             <p class="text-sm font-semibold text-[#4B2E0E] mb-1">Order #<?= htmlspecialchars($transaction['OrderID']) ?></p>
-            <p class="text-xs text-gray-600 mb-2">Customer: <?= htmlspecialchars($transaction['CustomerUsername']) ?><br>Date: <?= htmlspecialchars(date('M d, Y H:i', strtotime($transaction['OrderDate']))) ?></p>
+            <p class="text-xs text-gray-600 mb-2">
+              Customer: <?= htmlspecialchars($transaction['CustomerUsername']) ?><br>
+              Date: <?= htmlspecialchars(date('M d, Y H:i', strtotime($transaction['OrderDate']))) ?>
+            </p>
             <ul class="text-sm text-gray-700 list-disc list-inside mb-2">
               <li><?= nl2br(htmlspecialchars($transaction['OrderItems'])) ?></li>
             </ul>
             <div class="flex justify-between items-center mt-2">
               <span class="font-bold text-lg text-[#4B2E0E]">₱<?= number_format($transaction['TotalAmount'], 2) ?></span>
-              <span class="text-sm text-gray-600">Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?></span>
+              <button class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-4 py-1 rounded-lg text-sm shadow transition duration-150">
+                <i class="fas fa-utensils mr-1"></i> Prepare Order
+              </button>
+            </div>
+            <div class="text-right text-xs text-gray-600 mt-1">
+              Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?>
             </div>
           </div>
         <?php endforeach; ?>
@@ -156,7 +195,7 @@ foreach ($allOrders as $transaction) {
       <div id="customer-pagination" class="pagination-bar d-flex justify-content-center flex-wrap gap-2"></div>
     </div>
 
-    <!-- Walk-in Orders -->
+    <!-- Walk-in / Staff-Assisted Orders -->
     <div class="order-section">
       <h1 class="text-xl font-bold text-[#4B2E0E] mb-4 flex items-center gap-2">
         <i class="fas fa-walking"></i> Walk-in / Staff-Assisted Orders
@@ -165,13 +204,20 @@ foreach ($allOrders as $transaction) {
         <?php foreach ($walkinStaffOrders as $transaction): ?>
           <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-sm mb-4">
             <p class="text-sm font-semibold text-[#4B2E0E] mb-1">Order #<?= htmlspecialchars($transaction['OrderID']) ?></p>
-            <p class="text-xs text-gray-600 mb-2">Date: <?= htmlspecialchars(date('M d, Y H:i', strtotime($transaction['OrderDate']))) ?></p>
+            <p class="text-xs text-gray-600 mb-2">
+              Date: <?= htmlspecialchars(date('M d, Y H:i', strtotime($transaction['OrderDate']))) ?>
+            </p>
             <ul class="text-sm text-gray-700 list-disc list-inside mb-2">
               <li><?= nl2br(htmlspecialchars($transaction['OrderItems'])) ?></li>
             </ul>
             <div class="flex justify-between items-center mt-2">
               <span class="font-bold text-lg text-[#4B2E0E]">₱<?= number_format($transaction['TotalAmount'], 2) ?></span>
-              <span class="text-sm text-gray-600">Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?></span>
+              <button class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-4 py-1 rounded-lg text-sm shadow transition duration-150">
+                <i class="fas fa-utensils mr-1"></i> Prepare Order
+              </button>
+            </div>
+            <div class="text-right text-xs text-gray-600 mt-1">
+              Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?>
             </div>
           </div>
         <?php endforeach; ?>
