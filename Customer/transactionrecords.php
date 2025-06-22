@@ -52,51 +52,51 @@ $currentPage = basename($_SERVER['PHP_SELF']);
           <tr class="bg-[#4B2E0E] text-white text-left text-lg">
             <th class="p-4">Date</th>
             <th class="p-4">Item</th>
-            <th class="p-4">Quantity</th>
+            <th class="p-4">Order ID</th>
             <th class="p-4">Total</th>
             <th class="p-4">Reference No</th>
             <th class="p-4">Status</th>
           </tr>
         </thead>
         <tbody>
-          <?php if (empty($transactions)): ?>
-            <tr>
-              <td colspan="6" class="text-center p-6 text-gray-500">No transactions yet.</td>
-            </tr>
-          <?php else: ?>
-            <?php foreach ($transactions as $transaction): ?>
-              <?php
-                $items = explode('; ', $transaction['OrderItems']);
-                $quantities = array_map(function($item) {
-                  preg_match('/x(\d+)/', $item, $matches);
-                  return $matches[1] ?? '';
-                }, $items);
-              ?>
-              <tr class="border-b">
-                <td class="p-4 align-top"><?= htmlspecialchars($transaction['OrderDate']) ?></td>
-                <td class="p-4 align-top">
-                  <ul class="list-disc pl-5">
-                    <?php foreach ($items as $item): ?>
-                      <li><?= htmlspecialchars($item) ?></li>
-                    <?php endforeach; ?>
-                  </ul>
-                </td>
-                <td class="p-4 align-top">
-                  <ul class="list-disc pl-5">
-                    <?php foreach ($quantities as $qty): ?>
-                      <li><?= htmlspecialchars($qty) ?></li>
-                    <?php endforeach; ?>
-                  </ul>
-                </td>
-                <td class="p-4 align-top">₱<?= number_format($transaction['TotalAmount'], 2) ?></td>
-                <td class="p-4 align-top"><?= htmlspecialchars($transaction['ReferenceNo']) ?></td>
-                <td class="p-4 align-top">
-                  <?= isset($transaction['PaymentStatus']) && $transaction['PaymentStatus'] == 1 ? 'Paid' : 'Pending' ?>
-                </td>
-              </tr>
+  <?php if (empty($transactions)): ?>
+    <tr>
+      <td colspan="6" class="text-center p-6 text-gray-500">No transactions yet.</td>
+    </tr>
+  <?php else: ?>
+    <?php foreach ($transactions as $transaction): ?>
+      <?php
+        $items = explode('; ', $transaction['OrderItems']);
+      ?>
+      <tr class="border-b">
+        <!-- Date -->
+        <td class="p-4 align-top"><?= htmlspecialchars($transaction['OrderDate']) ?></td>
+        <!-- Items -->
+        <td class="p-4 align-top">
+          <ul class="list-disc pl-5">
+            <?php foreach ($items as $item): ?>
+              <li><?= htmlspecialchars($item) ?></li>
             <?php endforeach; ?>
-          <?php endif; ?>
-        </tbody>
+          </ul>
+        </td>
+        <!-- Order ID -->
+        <td class="p-4 align-top"><?= htmlspecialchars($transaction['OrderID']) ?></td>
+
+        <!-- Total -->
+        <td class="p-4 align-top">₱<?= number_format($transaction['TotalAmount'], 2) ?></td>
+
+        <!-- Reference No -->
+        <td class="p-4 align-top"><?= htmlspecialchars($transaction['ReferenceNo']) ?></td>
+
+        <!-- Status -->
+        <td class="p-4 align-top">
+          <span id="status-<?= $transaction['OrderID'] ?>" class="text-blue-700 font-medium">Pending</span>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+  <?php endif; ?>
+</tbody>
+
       </table>
     </div>
 
@@ -109,6 +109,18 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   </main>
 
   <script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const orders = document.querySelectorAll("[id^='status-']");
+    orders.forEach(order => {
+      const orderId = order.id.replace('status-', '');
+      const savedStatus = sessionStorage.getItem(`orderStatus-${orderId}`);
+      if (savedStatus) {
+        order.innerHTML = savedStatus;
+      }
+    });
+  });
+
     document.getElementById('logout-btn').addEventListener('click', function(e) {
       e.preventDefault();
       Swal.fire({

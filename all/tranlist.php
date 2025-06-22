@@ -1,9 +1,6 @@
 <?php
 session_start();
-ob_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 
 $loggedInUserType = null;
 $loggedInID = null;
@@ -16,7 +13,6 @@ if (isset($_SESSION['OwnerID'])) {
     $loggedInID = $_SESSION['EmployeeID'];
 } else {
     header('Location: login.php');
-    ob_end_clean();
     exit();
 }
 
@@ -102,8 +98,8 @@ foreach ($allOrders as $transaction) {
     }
   </style>
 </head>
+<!---Sidebar -->
 <body class="min-h-screen flex">
-
 <?php if ($loggedInUserType == 'owner'): ?>
 <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
     <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
@@ -134,7 +130,6 @@ foreach ($allOrders as $transaction) {
     </button>
 </aside>
 <?php elseif ($loggedInUserType == 'employee'): ?>
-    <!-- Employee Sidebar -->
    <?php $current = basename($_SERVER['PHP_SELF']); ?>   
 <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
   <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
@@ -182,13 +177,26 @@ foreach ($allOrders as $transaction) {
             </ul>
             <div class="flex justify-between items-center mt-2">
               <span class="font-bold text-lg text-[#4B2E0E]">₱<?= number_format($transaction['TotalAmount'], 2) ?></span>
-              <button class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-4 py-1 rounded-lg text-sm shadow transition duration-150">
-                <i class="fas fa-utensils mr-1"></i> Prepare Order
-              </button>
+              <div class="flex gap-2">
+                <button id="prep_btn" class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-3 py-1 rounded-lg text-sm shadow transition duration-150"
+                data-id="<?= $transaction['OrderID'] ?>"
+                  data-status="Preparing Order">
+                  <i class="fas fa-utensils mr-1"></i> Prepare Order
+                  </button>
+                <button id="order_btn" class="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded-lg text-sm shadow transition duration-150"
+                data-id="<?= $transaction['OrderID'] ?>"
+                data-status="Order Ready">
+               <i class="fas fa-check-circle mr-1"></i> Order Ready
+               </button>
+              </div>
             </div>
             <div class="text-right text-xs text-gray-600 mt-1">
               Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?>
             </div>
+            <div class="text-sm mt-2 text-gray-800 font-medium" id="status-<?= $transaction['OrderID'] ?>">
+              Status: <span class="text-blue-700">Pending</span>
+            </div>
+
           </div>
         <?php endforeach; ?>
       </div>
@@ -212,12 +220,24 @@ foreach ($allOrders as $transaction) {
             </ul>
             <div class="flex justify-between items-center mt-2">
               <span class="font-bold text-lg text-[#4B2E0E]">₱<?= number_format($transaction['TotalAmount'], 2) ?></span>
-              <button class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-4 py-1 rounded-lg text-sm shadow transition duration-150">
-                <i class="fas fa-utensils mr-1"></i> Prepare Order
-              </button>
+              <div class="flex gap-2">
+                <button id="prep_btn"class="bg-[#4B2E0E] hover:bg-[#3a240c] text-white px-3 py-1 rounded-lg text-sm shadow transition duration-150"
+                data-id="<?php echo $transaction['OrderID']; ?>"
+        data-status="Preparing Order">
+                  <i class="fas fa-utensils mr-1"></i> Prepare Order
+                  </button>
+                <button id="order_btn" class="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded-lg text-sm shadow transition duration-150"
+                data-id="<?php echo $transaction['OrderID']; ?>"
+        data-status="Order Ready">
+               <i class="fas fa-check-circle mr-1"></i> Order Ready
+               </button>
+              </div>
             </div>
             <div class="text-right text-xs text-gray-600 mt-1">
               Ref: <?= htmlspecialchars($transaction['ReferenceNo'] ?? 'N/A') ?>
+            </div>
+            <div class="text-sm mt-2 text-gray-800 font-medium" id="status-<?= $transaction['OrderID'] ?>">
+              Status: <span class="text-blue-700">Pending</span>
             </div>
           </div>
         <?php endforeach; ?>
@@ -279,25 +299,73 @@ function paginate(containerId, paginationId, itemsPerPage = 10) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    paginate('customer-orders', 'customer-pagination');
-    paginate('walkin-orders', 'walkin-pagination');
+  paginate('customer-orders', 'customer-pagination');
+  paginate('walkin-orders', 'walkin-pagination');
 
-    document.getElementById("logout-btn").addEventListener("click", () => {
-        Swal.fire({
-            title: 'Are you sure you want to log out?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#4B2E0E',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, log out',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "logout.php";
-            }
-        });
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    Swal.fire({
+      title: 'Are you sure you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#4B2E0E',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "logout.php";
+      }
     });
+  });
+
+ document.querySelectorAll('button[data-status]').forEach(button => {
+  button.addEventListener('click', () => {
+    const orderId = button.getAttribute('data-id');
+    const status = button.getAttribute('data-status');
+    const statusElement = document.getElementById(`status-${orderId}`);
+
+    if (statusElement) {
+      statusElement.innerHTML = ` <span class="text-green-700 font-semibold">${status}</span>`;
+      sessionStorage.setItem(`orderStatus-${orderId}`, `<span class="text-green-700 font-semibold">${status}</span>`);
+    }
+
+    const parent = button.closest('.flex');
+
+   if (status === "Preparing Order") {
+      button.disabled = true;
+      button.classList.add('opacity-50', 'cursor-not-allowed');
+    } else if (status === "Order Ready") {
+
+      parent.querySelectorAll('button[data-status]').forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      });
+    }
+  });
 });
+
+  Object.keys(sessionStorage).forEach(key => {
+    if (key.startsWith("orderStatus-")) {
+      const orderId = key.replace("orderStatus-", "");
+      const statusElement = document.getElementById(`status-${orderId}`);
+      if (statusElement) {
+        statusElement.innerHTML = sessionStorage.getItem(key);
+        const card = statusElement.closest('.border');
+        if (card) {
+          const btns = card.querySelectorAll('button[data-status]');
+          btns.forEach(btn => {
+            
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+          });
+        }
+      }
+    }
+  });
+});
+
+
+
+
 </script>
 </body>
 </html>

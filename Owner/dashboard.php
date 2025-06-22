@@ -6,7 +6,6 @@ $con = new database();
 
 $ownerFirstName = 'Owner';
 
-// Check if an Owner is logged in
 if (isset($_SESSION['OwnerID'])) {
     $ownerFirstName = $_SESSION['OwnerFN']; 
 } else {
@@ -14,7 +13,7 @@ if (isset($_SESSION['OwnerID'])) {
     exit();
 }
 
-// Fetch all data using the new SYSTEM-WIDE functions
+
 $totalSales = $con->getSystemTotalSales(30); 
 $totalOrders = $con->getSystemTotalOrders(30); 
 $totalSalesTransactions = $con->getSystemTotalTransactions();
@@ -110,10 +109,12 @@ if (!empty($topProducts['labels'][0])) {
         </div>
 
         <!-- Sales Overview Chart -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-6 z-10 max-w-4xl mx-auto w-full">
-            <h5 class="text-lg font-semibold text-gray-700 mb-4">Sales Overview (Last 30 Days)</h5>
-            <div style="height: 300px;"><canvas id="salesChart"></canvas></div>
-        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6 z-10 w-full">
+    <h5 class="text-xl font-semibold text-gray-700 mb-4">Sales Overview (Last 30 Days)</h5>
+    <div class="w-full h-[500px]">
+        <canvas id="salesChart" class="w-full h-full"></canvas>
+    </div>
+</div>
     </div>
     <script>
         const salesCtx = document.getElementById('salesChart').getContext('2d');

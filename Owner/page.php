@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-ob_start(); 
 
 if (!isset($_SESSION['OwnerID'])) {
 
   if (!(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
       header('Location: ../all/login.php');
-      ob_end_clean(); 
       exit();
   }
 }
@@ -17,7 +15,7 @@ $con = new database();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderData'])) {
     header('Content-Type: application/json'); 
-    ob_end_clean(); 
+
 
     if (!isset($_SESSION['OwnerID'])) {
         echo json_encode(['success' => false, 'message' => 'Session expired. Please log in again.']);
@@ -59,7 +57,7 @@ $categories = $con->getAllCategories();
  </head>
  <body class="bg-[rgba(255,255,255,0.7)] min-h-screen flex">
   <!-- Sidebar -->
- 
+
 <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
     <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
     <?php $current = basename($_SERVER['PHP_SELF']); ?>   
@@ -129,7 +127,6 @@ $categories = $con->getAllCategories();
    </div>
   </aside>
   <script>
-   // Dynamic menuData from PHP
    const menuData = <?php
 echo json_encode(array_map(function($p) {
     return [
@@ -368,8 +365,6 @@ echo json_encode(array_map(function($p) {
            quantity: item.quantity,
            price_id: item.price_id
          }));
-         
-         // Display a loading SweetAlert while processing
          Swal.fire({
            title: 'Processing Order...',
            text: 'Please wait, your transaction is being processed.',
@@ -378,13 +373,11 @@ echo json_encode(array_map(function($p) {
              Swal.showLoading();
            }
          });
-
-         // Use Fetch API to send data via POST
          const formData = new FormData();
          formData.append('orderData', JSON.stringify(orderArray));
          formData.append('paymentMethod', paymentMethod);
 
-         fetch('page.php', { // Post to the same page
+         fetch('page.php', { 
            method: 'POST',
            body: formData
          })

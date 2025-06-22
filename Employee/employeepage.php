@@ -2,11 +2,9 @@
 <?php
 session_start();
 
-ob_start();
 
 if (!isset($_SESSION['EmployeeID'])) {
-  header('Location: ../all/login.php'); // Correct path to login.php
-  ob_end_clean();
+  header('Location: ../all/login.php');
   exit();
 }
 
@@ -20,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderData'])) {
     if (!isset($_SESSION['EmployeeID'])) {
       
         header('Location: ../all/login.php?error=session_expired');
-        ob_end_clean();
         exit();
     }
     
@@ -36,13 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderData'])) {
        
         $redirectUrl = "../all/order_receipt.php?order_id={$result['order_id']}&ref_no={$result['ref_no']}";
         header("Location: " . $redirectUrl);
-        ob_end_clean();
         exit;
     } else {
        
         error_log("Employee Order Save Failed: " . $result['message']);
         header("Location: employeepage.php?error=order_failed"); 
-        ob_end_clean();
         exit;
     }
 }
@@ -132,7 +127,6 @@ $categories = $con->getAllCategories();
    </div>
   </aside>
   <script>
-   // Dynamic menuData from PHP
    const menuData = <?php
 echo json_encode(array_map(function($p) {
     return [
@@ -147,7 +141,6 @@ echo json_encode(array_map(function($p) {
 }, $products));
 ?>;
 
-   // Dynamic categories from PHP
    const categories = <?php echo json_encode($categories); ?>;
    const categoryNav = document.getElementById('category-nav');
    function renderCategories() {
@@ -353,7 +346,7 @@ echo json_encode(array_map(function($p) {
        input: 'radio',
        inputOptions: {
          cash: 'Cash',
-         gcash: 'GCash' // Updated payment options
+         gcash: 'GCash'
        },
        inputValidator: (value) => {
          if (!value) {

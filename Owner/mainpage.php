@@ -35,7 +35,7 @@ $ownerName = $_SESSION['OwnerFN'];
 </head>
 <body class="min-h-screen flex text-[#4B2E0E]">
 
-  <!-- Sidebar (copied exactly from dashboard.php) -->
+  <!-- Sidebar -->
   <aside class="bg-white bg-opacity-90 backdrop-blur-sm w-16 flex flex-col items-center py-6 space-y-8 shadow-lg">
     <img src="../images/logo.png" alt="Logo" class="w-10 h-10 rounded-full mb-4" />
     <?php $current = basename($_SERVER['PHP_SELF']); ?>   

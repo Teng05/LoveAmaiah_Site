@@ -1,17 +1,11 @@
 <?php
 
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
-header("Pragma: no-cache"); // HTTP 1.0.
-header("Expires: 0");
-
 session_start();
-ob_start();
 
 if (!isset($_SESSION['CustomerID'])) {
 
   if (!(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
       header('Location: ../all/coffee.php');
-      ob_end_clean(); 
       exit();
   }
 }
@@ -22,7 +16,6 @@ $con = new database();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderData'])) {
     if (!isset($_SESSION['CustomerID'])) {
         header('Location: ../all/login.php?error=session_expired');
-        ob_end_clean();
         exit();
     }
 
@@ -34,12 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderData'])) {
 
     if ($result['success']) {
         header("Location: ../Customer/transactionrecords.php");
-        ob_end_clean();
         exit;
     } else {
         error_log("Customer Order Save Failed: " . $result['message']);
         header("Location: customerpage.php?error=order_failed");
-        ob_end_clean();
         exit;
     }
 }
@@ -90,11 +81,6 @@ $categories = $con->getAllCategories();
 </aside>
 
   <!-- Main content -->
-  <!-- (The rest of your existing <main> and <script> content remains unchanged below this line) -->
-
- 
- 
-  <!-- Main content -->
   <main class="flex-1 p-6 relative flex flex-col">
     <img alt="Background image of coffee beans" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-20 -z-10" height="800" src="https://storage.googleapis.com/a1aa/image/22cccae8-cc1a-4fb3-7955-287078a4f8d4.jpg" width="1200"/>
     <header class="mb-4">
@@ -112,7 +98,7 @@ $categories = $con->getAllCategories();
 </section>
   </main>
  
-  <!-- Order summary (FIXED LAYOUT) -->
+  <!-- Order summary -->
   <aside aria-label="Order summary" class="w-80 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-lg flex flex-col p-4">
    <div class="flex-1 overflow-y-auto pr-2">
     <h2 class="font-semibold text-[#4B2E0E] mb-2"><?php echo htmlspecialchars($customer); ?>'s Order:</h2>  
@@ -131,7 +117,6 @@ $categories = $con->getAllCategories();
   </aside>
  
   <script>
-   // Dynamic menuData from PHP
    const menuData = <?php
 echo json_encode(array_map(function($p) {
     return [
@@ -146,7 +131,6 @@ echo json_encode(array_map(function($p) {
 }, $products));
 ?>;
  
-   // Dynamic categories from PHP
    const categories = <?php echo json_encode($categories); ?>;
    const categoryNav = document.getElementById('category-nav');
    function renderCategories() {

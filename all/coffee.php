@@ -99,7 +99,6 @@ session_start();
       gap: 4rem;
     }
 
-    /* HERO SECTION */
     .hero {
       display: flex;
       align-items: center;
@@ -110,7 +109,7 @@ session_start();
     }
 
     .hero img {
-      max-width: 800px; /* Increased from 700px */
+      max-width: 800px; 
       width: 100%;
       flex: 1 1 45%;
       border-radius: 16px;
@@ -124,7 +123,7 @@ session_start();
     }
 
     .hero-text h1 {
-      font-size: 4.5rem; /* Increased from 4rem */
+      font-size: 4.5rem; 
       line-height: 1.2;
       margin-bottom: 1.5rem;
     }
@@ -134,7 +133,7 @@ session_start();
     }
 
     .hero-text p {
-      font-size: 1.7rem; /* Increased from 1.5rem */
+      font-size: 1.7rem; 
       margin-bottom: 2.5rem;
       line-height: 1.6;
     }
@@ -155,7 +154,6 @@ session_start();
       background-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* COFFEE CARDS */
     .coffee-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -196,7 +194,6 @@ session_start();
       line-height: 1.5;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .hero {
         flex-direction: column;
@@ -249,8 +246,6 @@ session_start();
   </style>
 </head>
 <body>
-
-  <!-- TOP BAR HEADER -->
   <header class="top-bar">
     <a href="#" class="logo-container">
       <img src="../images/logo.png" alt="Love Amaiah Logo" />
@@ -264,7 +259,6 @@ session_start();
   
   <!-- Main content -->
   <main class="main-content">
-    <!-- HERO SECTION -->
     <section class="hero">
       <img src="../images/mainpage_coffee.png" alt="Latte Art">
       <div class="hero-text">
@@ -273,7 +267,6 @@ session_start();
         <button onclick="window.location.href='login.php'">Order Coffee</button>
       </div>
     </section>
-
     <!-- COFFEE CARDS -->
     <section class="coffee-cards">
       <div class="card">

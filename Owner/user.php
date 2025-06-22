@@ -117,7 +117,7 @@ if (isset($_POST['add_employee'])) {
       </thead>
       <tbody id="employee-body">
         <?php
-        $employees = $con->getEmployee();
+        $employees = array_reverse($con->getEmployee());
         foreach ($employees as $employee) {
         ?>
         <tr class="border-b hover:bg-gray-50 <?= $employee['is_active'] == 0 ? 'bg-red-50 text-gray-500' : '' ?>">
@@ -172,7 +172,6 @@ if (isset($_POST['add_employee'])) {
 </main>
 
 <script>
-// --- START: FULL JAVASCRIPT BLOCK ---
 const isNotEmpty = (value) => value.trim() !== '';
 const isPasswordValid = (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(value);
 const isPhoneValid = (value) => /^09\d{9}$/.test(value);

@@ -1,17 +1,14 @@
 
 <?php
 session_start();
-// Start output buffering for this page's HTML, as it might be directly accessed
-ob_start(); 
 
 require_once('../classes/database.php');
 $con = new database();
 
-$loggedInUserType = ''; // Initialize
+$loggedInUserType = ''; 
 $userID = null;
-$pageTitle = "Settings"; // Default title
+$pageTitle = "Settings"; 
 
-// Determine the logged-in user type and ID
 if (isset($_SESSION['OwnerID'])) {
     $loggedInUserType = 'owner';
     $userID = $_SESSION['OwnerID'];
@@ -25,28 +22,22 @@ if (isset($_SESSION['OwnerID'])) {
     $userID = $_SESSION['CustomerID'];
     $pageTitle = "Customer Settings";
 } else {
-    // If no user is logged in, redirect to login page
-    header('Location: login.php'); // login.php is in the same 'all' folder
-    ob_end_clean(); // Discard buffered output before redirect
+    header('Location: login.php'); 
     exit();
 }
 
 $saved = false;
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pass the user details and all POST data to the update method
-    if ($con->updateUserData($userID, $loggedInUserType, $_POST)) { // Use $loggedInUserType here
+    if ($con->updateUserData($userID, $loggedInUserType, $_POST)) { 
         $saved = true;
     }
 }
 
-// Fetch user data using the new standardized method
-$userData = $con->getUserData($userID, $loggedInUserType); // Use $loggedInUserType here
+$userData = $con->getUserData($userID, $loggedInUserType);
 
-// If user data could not be fetched, show an error (should ideally not happen after successful login)
 if (empty($userData)) {
     echo "Error: User could not be found. Please try logging in again.";
-    // Potentially log out or redirect here
+
     exit();
 }
 
@@ -57,20 +48,16 @@ if (empty($userData)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle); ?></title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background: url('../images/LAbg.png') no-repeat center center fixed;
             background-size: cover;
-            background-color: rgba(255, 255, 255, 0.7); /* Fallback or layer */
+            background-color: rgba(255, 255, 255, 0.7);
         }
         .sidebar {
             width: 90px;
@@ -97,15 +84,13 @@ if (empty($userData)) {
         .sidebar a:hover, .sidebar button:hover {
             color: #C4A07A;
         }
-        /* Main content area alignment */
         .main-content-area {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.5rem; /* Equivalent to p-6 */
+            padding: 1.5rem; 
         }
-        /* Custom scrollbar for consistency (if needed on inner elements) */
         .overflow-y-auto::-webkit-scrollbar { width: 8px; }
         .overflow-y-auto::-webkit-scrollbar-track { background: rgba(200, 200, 200, 0.3); border-radius: 10px; }
         .overflow-y-auto::-webkit-scrollbar-thumb { background-color: #C4A07A; border-radius: 10px; border: 2px solid rgba(255, 255, 255, 0.5); }
@@ -195,11 +180,9 @@ if (empty($userData)) {
   <!-- Main content area for the settings form -->
   <div class="main-content-area">
     <div class="bg-white/90 rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <h2 class="text-2xl font-bold text-[#4B2E0E] mb-6 text-center">Account Settings</h2>
-        
+        <h2 class="text-2xl font-bold text-[#4B2E0E] mb-6 text-center">Account Settings</h2>     
         <?php if ($saved): ?>
         <script>
-            // Use DOMContentLoaded to ensure the script runs after the page is loaded
             document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire('Success', 'Profile updated successfully!', 'success');
             });
@@ -233,7 +216,6 @@ if (empty($userData)) {
   </div>
 
     <script>
-        // Common logout functionality for all users
         document.getElementById("logout-btn").addEventListener("click", () => {
             Swal.fire({
                 title: 'Are you sure you want to log out?',
@@ -245,7 +227,6 @@ if (empty($userData)) {
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // This path is relative to the current file (settings.php is in ../all/)
                     window.location.href = "logout.php"; 
                 }
             });

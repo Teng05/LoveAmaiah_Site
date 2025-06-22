@@ -1,11 +1,8 @@
 <?php
 
-ob_start();
-
 session_start();
 if (!isset($_SESSION['OwnerID'])) {
   header('Location: ../all/login.php');
-  ob_end_clean(); 
   exit();
 }
 
@@ -52,7 +49,6 @@ if (isset($_POST['add_product'])) {
   }
 }
 
-ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -140,7 +136,6 @@ ob_end_flush();
           <?php
       $products = $con->getJoinedProductData();
       usort($products, function($a, $b) {
-          // This line sorts from LOWEST to HIGHEST
           return $a['ProductID'] <=> $b['ProductID']; 
       });
       foreach ($products as $product) {
